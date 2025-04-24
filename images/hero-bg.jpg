@@ -1,0 +1,6 @@
+<!-- This is a placeholder for the hero background image. In a real project, you would use an actual JPG file. -->
+<svg width="1200" height="600" viewBox="0 0 1200 600" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="600" fill="#2E2E2E" />
+  <text x="600" y="300" font-family="Arial" font-size="30" text-anchor="middle" fill="white">Hero Image: Scooter in Urban Setting</text>
+  <text x="600" y="350" font-family="Arial" font-size="20" text-anchor="middle" fill="#B2BEB5">Replace with an actual image from Unsplash or Pexels</text>
+</svg>

@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book a Ride - City Ride</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        /* Ride Results and Booked Rides */
+        .ride-results, .my-booked-rides {
+            margin-bottom: 40px;
+        }
+        
+        .ride-results h2, .my-booked-rides h2 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+        
+        .results-count {
+            margin-bottom: 15px;
+            color: #666;
+        }
+        
+       /* .rides-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }*/
+
+        .rides-list{
+            display: flex;
+            gap:20px;
+            flex-direction: column;
+        }
+        
+        .ride-card {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .ride-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .ride-card-header {
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .ride-route {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .ride-location {
+            font-weight: 600;
+        }
+        
+        .ride-arrow {
+            margin: 0 10px;
+            color: #aaa;
+        }
+        
+        .ride-date {
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        .ride-card-body {
+            padding: 15px;
+        }
+        
+        .ride-details {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .ride-detail {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .ride-detail-label {
+            font-size: 0.85rem;
+            color: #666;
+        }
+        
+        .ride-detail-value {
+            font-weight: 500;
+        }
+        
+        .ride-driver {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .driver-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #e9ecef;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: #495057;
+        }
+        
+        .driver-info {
+            flex: 1;
+        }
+        
+        .driver-name {
+            font-weight: 500;
+        }
+        
+        .driver-rating {
+            font-size: 0.85rem;
+            color: #666;
+        }
+        
+        .ride-card-footer {
+            padding: 15px;
+            border-top: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .ride-price {
+            font-weight: 600;
+            color: #4a6bff;
+        }
+        
+        .ride-status {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+        
+        .status-confirmed {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        
+        .status-pending {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+        
+        .status-completed {
+            background-color: #cce5ff;
+            color: #004085;
+        }
+        
+        .status-cancelled {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        
+        .no-rides-message {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 30px;
+            color: #666;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        /* Button Styles */
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 4px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        .btn-primary {
+            background-color: #4a6bff;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: #3a5bef;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="logo-container">
+                <img src="images/logo.png" alt="City Ride Logo" class="logo">
+                <h1 class="brand-title">City Ride</h1>
+            </div>
+            <div class="menu-toggle" id="mobile-menu">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+            <ul class="nav-menu">
+                <li class="nav-item"><a href="index.html" class="nav-link">Home</a></li>
+                <li class="nav-item"><a href="share-ride.html" class="nav-link">Share a Ride</a></li>
+                <li class="nav-item"><a href="book-ride.html" class="nav-link active">Book a Ride</a></li>
+                <li class="nav-item"><a href="login.html" class="nav-link">Login</a></li>
+                <li class="nav-item"><a href="signup.html" class="nav-link">Sign Up</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="page-header">
+            <div class="container">
+                <h2>Book a Ride</h2>
+                <p>Find affordable rides shared by community members</p>
+            </div>
+        </section>
+
+        <section class="search-rides">
+            <div class="container">
+                <div class="search-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="search-pickup">From</label>
+                            <input type="text" id="search-pickup" placeholder="Enter pickup location">
+                        </div>
+                        <div class="form-group">
+                            <label for="search-dropoff">To</label>
+                            <input type="text" id="search-dropoff" placeholder="Enter drop location">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="search-date">Date</label>
+                            <input type="date" id="search-date">
+                        </div>
+                        <div class="form-group">
+                            <label for="search-city">City</label>
+                            <select id="search-city">
+                                <option value="">All Cities</option>
+                                <option value="new-york">New York</option>
+                                <option value="chicago">Chicago</option>
+                                <option value="los-angeles">Los Angeles</option>
+                                <option value="san-francisco">San Francisco</option>
+                                <option value="miami">Miami</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <button id="search-rides-btn" class="btn btn-primary">Search Rides</button>
+                        <button id="clear-search-btn" class="btn btn-secondary">Clear</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="filter-section">
+            <div class="container">
+                <div class="filters">
+                    <h3>Filters</h3>
+                    <div class="filter-group">
+                        <label for="vehicle-filter">Vehicle Type</label>
+                        <select id="vehicle-filter">
+                            <option value="">All Types</option>
+                            <option value="motorbike">Motorbike</option>
+                            <option value="scooter">Scooter</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="price-range">Max Price ($)</label>
+                        <input type="range" id="price-range" min="1" max="50" value="50">
+                        <span id="price-value">$50</span>
+                    </div>
+                    <button id="apply-filters" class="btn btn-secondary">Apply Filters</button>
+                </div>
+            </div>
+        </section>
+
+        <section class="ride-results">
+            <div class="container">
+                <h2>Available Rides</h2>
+                <div id="results-count" class="results-count">6 rides found</div>
+                <div id="ride-results-list" class="rides-list">
+                    <!-- Available Ride Card 1 -->
+                    <div class="ride-card">
+                        <div class="ride-card-header">
+                            <div class="ride-route">
+                                <span class="ride-location">Downtown</span>
+                                <span class="ride-arrow">→</span>
+                                <span class="ride-location">Airport</span>
+                            </div>
+                            <div class="ride-date">Today, 2:30 PM</div>
+                        </div>
+                        <div class="ride-card-body">
+                            <div class="ride-details">
+                                <div class="ride-detail">
+                                    <span class="ride-detail-label">Vehicle:</span>
+                                    <span class="ride-detail-value">Scooter</span>
+                                </div>
+                                <div class="ride-detail">
+                                    <span class="ride-detail-label">Distance:</span>
+                                    <span class="ride-detail-value">12 km</span>
+                                </div>
+                                <div class="ride-detail">
+                                    <span class="ride-detail-label">Duration:</span>
+                                    <span class="ride-detail-value">25 min</span>
+                                </div>
+                            </div>
+                            <div class="ride-driver">
+                                <div class="driver-avatar">JD</div>
+                                <div class="driver-info">
+                                    <div class="driver-name">John Doe</div>
+                                    <div class="driver-rating">★★★★☆ (4.2)</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ride-card-footer">
+                            <div class="ride-price">$15</div>
+                            <button class="btn btn-primary">Book Now</button>
+                        </div>
+                    </div>
+
+                    <!-- Available Ride Card 2 -->
+                    <div class="ride-card">
+                        <div class="ride-card-header">
+                            <div class="ride-route">
+                                <span class="ride-location">Central Park</span>
+                                <span class="ride-arrow">→</span>
+                                <span class="ride-location">Times Square</span>
+                            </div>
+                            <div class="ride-date">Tomorrow, 10:00 AM</div>
+                        </div>
+                        <div class="ride-card-body">
+                            <div class="ride-details">
+                                <div class="ride-detail">
+                                    <span class="ride-detail-label">Vehicle:</span>
+                                    <span class="ride-detail-value">Motorbike</span>
+                                </div>
+                                <div class="ride-detail">
+                                    <span class="ride-detail-label">Distance:</span>
+                                    <span class="ride-detail-value">5 km</span>
+                                </div>
+                                <div class="ride-detail">
+                                    <span class="ride-detail-label">Duration:</span>
+                                    <span class="ride-detail-value">15 min</span>
+                                </div>
+                            </div>
+                            <div class="ride-driver">
+                                <div class="driver-avatar">AS</div>
+                                <div class="driver-info">
+                                    <div class="driver-name">Alice Smith</div>
+                                    <div class="driver-rating">★★★★★ (4.9)</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ride-card-footer">
+                            <div class="ride-price">$8</div>
+                            <button class="btn btn-primary">Book Now</button>
+                        </div>
+                    </div>
+
+                    <!-- Available Ride Card 3 -->
+                    <div class="ride-card">
+                        <div class="ride-card-header">
+                            <div class="ride-route">
+                                <span class="ride-location">University</span>
+                                <span class="ride-arrow">→</span>
+                                <span class="ride-location">Shopping Mall</span>
+                            </div>
+                            <div class="ride-date">Today, 5:45 PM</div>
+                        </div>
+                        <div class="ride-card-body">
+                            <div class="ride-details">
+                                <div class="ride-detail">
+                                    <span class="ride-detail-label">Vehicle:</span>
+                                    <span class="ride-detail-value">Scooter</span>
+                                </div>
+                                <div class="ride-detail">
+                                    <span class="ride-detail-label">Distance:</span>
+                                    <span class="ride-detail-value">8 km</span>
+                                </div>
+                                <div class="ride-detail">
+                                    <span class="ride-detail-label">Duration:</span>
+                                    <span class="ride-detail-value">20 min</span>
+                                </div>
+                            </div>
+                            <div class="ride-driver">
+                                <div class="driver-avatar">RJ</div>
+                                <div class="driver-info">
+                                    <div class="driver-name">Robert Johnson</div>
+                                    <div class="driver-rating">★★★★☆ (4.3)</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ride-card-footer">
+                            <div class="ride-price">$12</div>
+                            <button class="btn btn-primary">Book Now</button>
+                        </div>
+                    </div>
+
+                    <!-- Available Ride Card 4 -->
+                    <div class="ride-card">
+                        <div class="ride-card-header">
+                            <div class="ride-route">
+                                <span class="ride-location">Beach</span>
+                                <span class="ride-arrow">→</span>
+                                <span class="ride-location">Downtown</span>
+                            </div>
+                            <div class="ride-date">Tomorrow, 3:15 PM</div>
+                        </div>
+                        <div class="ride-card-body">
+                            <div class="ride-details">
+                                <div class="ride-detail">
+                                    <span class="ride-detail-label">Vehicle:</span>
+                                    <span class="ride-detail-value">Motorbike</span>
+                                </div>
+                                <div class="ride-detail">
+                                    <span class="ride-detail-label">Distance:</span>
+                                    <span class="ride-detail-value">15 km</span>
+                                </div>
+                                <div class="ride-detail">
+                                    <span class="ride-detail-label">Duration:</span>
+                                    <span class="ride-detail-value">30 min</span>
+                                </div>
+                            </div>
+                            <div class="ride-driver">
+                                <div class="driver-avatar">EW</div>
+                                <div class="driver-info">
+                                    <div class="driver-name">Emma Wilson</div>
+                                    <div class="driver-rating">★★★★☆ (4.4)</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ride-card-footer">
+                            <div class="ride-price">$18</div>
+                            <button class="btn btn-primary">Book Now</button>
+                        </div>
+                    </div>
+
+                    <!-- Available Ride Card 5 -->
+                    <div class="ride-card">
+                        <div class="ride-card-header">
+                            <div class="ride-route">
+                                <span class="ride-location">Stadium</span>
+                                <span class="ride-arrow">→</span>
+                                <span class="ride-location">Restaurant Row</span>
+                            </div>
+                            <div class="ride-date">Today, 8:00 PM</div>
+                        </div>
+                        <div class="ride-card-body">
+                            <div class="ride-details">
+                                <div class="ride-detail">
+                                    <span class="ride-detail-label">Vehicle:</span>
+                                    <span class="ride-detail-value">Scooter</span>
+                                </div>
+                                <div class="ride-detail">
+                                    <span class="ride-detail-label">Distance:</span>
+                                    <span class="ride-detail-value">6 km</span>
+                                </div>
+                                <div class="ride-detail">
+                                    <span class="ride-detail-label">Duration:</span>
+                                    <span class="ride-detail-value">18 min</span>
+                                </div>
+                            </div>
+                            <div class="ride-driver">
+                                <div class="driver-avatar">MB</div>
+                                <div class="driver-info">
+                                    <div class="driver-name">Michael Brown</div>
+                                    <div class="driver-rating">★★★★★ (4.8)</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ride-card-footer">
+                            <div class="ride-price">$10</div>
+                            <button class="btn btn-primary">Book Now</button>
+                        </div>
+                    </div>
+
+                    <!-- Available Ride Card 6 -->
+                    <div class="ride-card">
+                        <div class="ride-card-header">
+                            <div class="ride-route">
+                                <span class="ride-location">Library</span>
+                                <span class="ride-arrow">→</span>
+                                <span class="ride-location">Tech Park</span>
+                            </div>
+                            <div class="ride-date">Tomorrow, 9:30 AM</div>
+                        </div>
+                        <div class="ride-card-body">
+                            <div class="ride-details">
+                                <div class="ride-detail">
+                                    <span class="ride-detail-label">Vehicle:</span>
+                                    <span class="ride-detail-value">Motorbike</span>
+                                </div>
+                                <div class="ride-detail">
+                                    <span class="ride-detail-label">Distance:</span>
+                                    <span class="ride-detail-value">10 km</span>
+                                </div>
+                                <div class="ride-detail">
+                                    <span class="ride-detail-label">Duration:</span>
+                                    <span class="ride-detail-value">22 min</span>
+                                </div>
+                            </div>
+                            <div class="ride-driver">
+                                <div class="driver-avatar">SL</div>
+                                <div class="driver-info">
+                                    <div class="driver-name">Sarah Lee</div>
+                                    <div class="driver-rating">★★★★☆ (4.5)</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ride-card-footer">
+                            <div class="ride-price">$14</div>
+                            <button class="btn btn-primary">Book Now</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="my-booked-rides">
+            <div class="container">
+                <h2>My Booked Rides</h2>
+                <div id="booked-rides-list" class="rides-list">
+                    <!-- Booked Ride Card 1 -->
+                    <div class="ride-card">
+                        <div class="ride-card-header">
+                            <div class="ride-route">
+                                <span class="ride-location">Home</span>
+                                <span class="ride-arrow">→</span>
+                                <span class="ride-location">Office</span>
+                            </div>
+                            <div class="ride-date">Tomorrow, 8:00 AM</div>
+                        </div>
+                        <div class="ride-card-body">
+                            <div class="ride-details">
+                                <div class="ride-detail">
+                                    <span class="ride-detail-label">Vehicle:</span>
+                                    <span class="ride-detail-value">Scooter</span>
+                                </div>
+                                <div class="ride-detail">
+                                    <span class="ride-detail-label">Distance:</span>
+                                    <span class="ride-detail-value">7 km</span>
+                                </div>
+                                <div class="ride-detail">
+                                    <span class="ride-detail-label">Duration:</span>
+                                    <span class="ride-detail-value">20 min</span>
+                                </div>
+                            </div>
+                            <div class="ride-driver">
+                                <div class="driver-avatar">TG</div>
+                                <div class="driver-info">
+                                    <div class="driver-name">Tom Garcia</div>
+                                    <div class="driver-rating">★★★★★ (4.7)</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ride-card-footer">
+                            <div class="ride-price">$11</div>
+                            <div class="ride-status status-confirmed">Confirmed</div>
+                        </div>
+                    </div>
+
+                    <!-- Booked Ride Card 2 -->
+                    <div class="ride-card">
+                        <div class="ride-card-header">
+                            <div class="ride-route">
+                                <span class="ride-location">Mall</span>
+                                <span class="ride-arrow">→</span>
+                                <span class="ride-location">Gym</span>
+                            </div>
+                            <div class="ride-date">Today, 6:30 PM</div>
+                        </div>
+                        <div class="ride-card-body">
+                            <div class="ride-details">
+                                <div class="ride-detail">
+                                    <span class="ride-detail-label">Vehicle:</span>
+                                    <span class="ride-detail-value">Motorbike</span>
+                                </div>
+                                <div class="ride-detail">
+                                    <span class="ride-detail-label">Distance:</span>
+                                    <span class="ride-detail-value">4 km</span>
+                                </div>
+                                <div class="ride-detail">
+                                    <span class="ride-detail-label">Duration:</span>
+                                    <span class="ride-detail-value">12 min</span>
+                                </div>
+                            </div>
+                            <div class="ride-driver">
+                                <div class="driver-avatar">KP</div>
+                                <div class="driver-info">
+                                    <div class="driver-name">Kevin Park</div>
+                                    <div class="driver-rating">★★★★☆ (4.3)</div>
+                                </_mem>
+                            </div>
+                        </div>
+                        <div class="ride-card-footer">
+                            <div class="ride-price">$7</div>
+                            <div class="ride-status status-pending">Pending</div>
+                        </div>
+                    </div>
+
+                    <!-- Booked Ride Card 3 -->
+                    <div class="ride-card">
+                        <div class="ride-card-header">
+                            <div class="ride-route">
+                                <span class="ride-location">Airport</span>
+                                <span class="ride-arrow">→</span>
+                                <span class="ride-location">Hotel</span>
+                            </div>
+                            <div class="ride-date">Yesterday, 10:15 AM</div>
+                        </div>
+                        <div class="ride-card-body">
+                            <div class="ride-details">
+                                <div class="ride-detail">
+                                    <span class="ride-detail-label">Vehicle:</span>
+                                    <span class="ride-detail-value">Scooter</span>
+                                </div>
+                                <div class="ride-detail">
+                                    <span class="ride-detail-label">Distance:</span>
+                                    <span class="ride-detail-value">18 km</span>
+                                </div>
+                                <div class="ride-detail">
+                                    <span class="ride-detail-label">Duration:</span>
+                                    <span class="ride-detail-value">35 min</span>
+                                </div>
+                            </div>
+                            <div class="ride-driver">
+                                <div class="driver-avatar">LM</div>
+                                <div class="driver-info">
+                                    <div class="driver-name">Lisa Martinez</div>
+                                    <div class="driver-rating">★★★★★ (4.9)</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ride-card-footer">
+                            <div class="ride-price">$22</div>
+                            <div class="ride-status status-completed">Completed</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Contact Us</h3>
+                    <p>Email: support@cityride.com</p>
+                    <p>Address: 123 Market Street, San Francisco, California</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Legal</h3>
+                    <ul>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Follow Us</h3>
+                    <div class="social-icons">
+                        <a href="#" class="social-icon">FB</a>
+                        <a href="#" class="social-icon">TW</a>
+                        <a href="#" class="social-icon">IG</a>
+                        <a href="#" class="social-icon">LI</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2023 City Ride. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+    <script src="js/book-ride.js"></script>
+</body>
+</html>

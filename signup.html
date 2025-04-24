@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up - City Ride</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="logo-container">
+                <img src="images/logo.png" alt="City Ride Logo" class="logo">
+                <h1 class="brand-title">City Ride</h1>
+            </div>
+            <div class="menu-toggle" id="mobile-menu">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+            <ul class="nav-menu">
+                <li class="nav-item"><a href="index.html" class="nav-link">Home</a></li>
+                <li class="nav-item"><a href="share-ride.html" class="nav-link">Share a Ride</a></li>
+                <li class="nav-item"><a href="book-ride.html" class="nav-link">Book a Ride</a></li>
+                <li class="nav-item"><a href="login.html" class="nav-link">Login</a></li>
+                <li class="nav-item"><a href="signup.html" class="nav-link active">Sign Up</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="auth-section">
+            <div class="container">
+                <div class="auth-container">
+                    <h2>Create an Account</h2>
+                    <form id="signup-form" class="auth-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="first-name">First Name</label>
+                                <input type="text" id="first-name" required placeholder="Enter your first name">
+                                <span class="error-message" id="first-name-error"></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="last-name">Last Name</label>
+                                <input type="text" id="last-name" required placeholder="Enter your last name">
+                                <span class="error-message" id="last-name-error"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="signup-email">Email</label>
+                            <input type="email" id="signup-email" required placeholder="Enter your email">
+                            <span class="error-message" id="signup-email-error"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Phone Number</label>
+                            <input type="tel" id="phone" required placeholder="Enter your phone number">
+                            <span class="error-message" id="phone-error"></span>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="signup-password">Password</label>
+                                <input type="password" id="signup-password" required placeholder="Create a password">
+                                <span class="error-message" id="signup-password-error"></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="confirm-password">Confirm Password</label>
+                                <input type="password" id="confirm-password" required placeholder="Confirm your password">
+                                <span class="error-message" id="confirm-password-error"></span>
+                            </div>
+                        </div>
+                        <div class="form-group terms">
+                            <input type="checkbox" id="terms" required>
+                            <label for="terms">I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a></label>
+                            <span class="error-message" id="terms-error"></span>
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary full-width">Create Account</button>
+                        </div>
+                        <div class="auth-links">
+                            <p>Already have an account? <a href="login.html">Login</a></p>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Contact Us</h3>
+                    <p>Email: support@cityride.com</p>
+                    <p>Address: 123 Market Street, San Francisco, California</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Legal</h3>
+                    <ul>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Follow Us</h3>
+                    <div class="social-icons">
+                        <a href="#" class="social-icon">FB</a>
+                        <a href="#" class="social-icon">TW</a>
+                        <a href="#" class="social-icon">IG</a>
+                        <a href="#" class="social-icon">LI</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023 City Ride. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+    <script src="js/auth.js"></script>
+</body>
+</html>
